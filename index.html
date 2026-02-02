@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<title>Méridiens MTC – Version interactive avancée</title>
+
+<style>
+body {
+  font-family: Arial, sans-serif;
+  display: flex;
+  gap: 20px;
+  padding: 20px;
+}
+
+.controls {
+  width: 280px;
+}
+
+.controls h2 {
+  margin-top: 0;
+}
+
+button {
+  margin: 5px 5px 10px 0;
+}
+
+svg {
+  width: 420px;
+  border: 1px solid #ccc;
+}
+
+/* Méridiens */
+.meridian {
+  fill: none;
+  stroke-width: 4;
+  display: none;
+  cursor: pointer;
+}
+
+/* Éléments */
+.metal { stroke: #95a5a6; }
+.terre { stroke: #f1c40f; }
+.feu { stroke: #e74c3c; }
+.eau { stroke: #3498db; }
+.bois { stroke: #27ae60; }
+
+/* Tooltip */
+.tooltip {
+  position: absolute;
+  background: #333;
+  color: #fff;
+  padding: 6px 10px;
+  border-radius: 4px;
+  font-size: 13px;
+  pointer-events: none;
+  display: none;
+}
+</style>
+</head>
+
+<body>
+
+<div class="controls">
+  <h2>Méridiens MTC</h2>
+
+  <button onclick="showAll()">Tout afficher</button>
+  <button onclick="hideAll()">Tout masquer</button>
+
+  <hr>
+
+  <label><input type="checkbox" onchange="toggle('poumon')"> Poumon (Métal, Yin)</label><br>
+  <label><input type="checkbox" onchange="toggle('gi')"> Gros Intestin (Métal, Yang)</label><br>
+  <label><input type="checkbox" onchange="toggle('estomac')"> Estomac (Terre, Yang)</label><br>
+  <label><input type="checkbox" onchange="toggle('rate')"> Rate (Terre, Yin)</label><br>
+  <label><input type="checkbox" onchange="toggle('coeur')"> Cœur (Feu, Yin)</label><br>
+  <label><input type="checkbox" onchange="toggle('ig')"> Intestin Grêle (Feu, Yang)</label><br>
+  <label><input type="checkbox" onchange="toggle('vessie')"> Vessie (Eau, Yang)</label><br>
+  <label><input type="checkbox" onchange="toggle('rein')"> Rein (Eau, Yin)</label><br>
+  <label><input type="checkbox" onchange="toggle('mc')"> Maître-Cœur (Feu, Yin)</label><br>
+  <label><input type="checkbox" onchange="toggle('tr')"> Triple Réchauffeur (Feu, Yang)</label><br>
+  <label><input type="checkbox" onchange="toggle('vb')"> Vésicule Biliaire (Bois, Yang)</label><br>
+  <label><input type="checkbox" onchange="toggle('foie')"> Foie (Bois, Yin)</label>
+</div>
+
+<!-- SCHÉMA -->
+<svg viewBox="0 0 200 500">
+
+  <!-- Corps simplifié -->
+  <circle cx="100" cy="40" r="25" fill="#f2d6c9"/>
+  <rect x="70" y="65" width="60" height="120" rx="20" fill="#f2d6c9"/>
+  <rect x="65" y="185" width="25" height="180" rx="12" fill="#f2d6c9"/>
+  <rect x="110" y="185" width="25" height="180" rx="12" fill="#f2d6c9"/>
+
+  <!-- MÉRIDIENS -->
+  <path id="poumon" class="meridian metal" 
+        d="M85 90 L75 150 L70 230"
+        data-info="Poumon – Métal – Yin"/>
+
+  <path id="gi" class="meridian metal"
+        d="M125 230 L135 150 L145 90"
+        data-info="Gros Intestin – Métal – Yang"/>
+
+  <path id="estomac" class="meridian terre"
+        d="M100 100 L95 170 L90 260 L85 340"
+        data-info="Estomac – Terre – Yang"/>
+
+  <path id="rate" class="meridian terre"
+        d="M105 110 L110 180 L115 260"
+        data-info="Rate – Terre – Yin"/>
+
+  <path id="coeur" class="meridian feu"
+        d="M95 110 L85 180 L80 250"
+        data-info="Cœur – Feu – Yin"/>
+
+  <path id="ig" class="meridian feu"
+        d="M120 250 L130 190 L140 130"
+        data-info="Intestin Grêle – Feu – Yang"/>
+
+  <path id="vessie" class="meridian eau"
+        d="M140 120 L140 220 L135 360"
+        data-info="Vessie – Eau – Yang"/>
+
+  <path id="rein" class="meridian eau"
+        d="M90 130 L90 230 L95 350"
+        data-info="Rein – Eau – Yin"/>
+
+  <path id="mc" class="meridian feu"
+        d="M100 120 L95 200 L90 280"
+        data-info="Maître-Cœur – Feu – Yin"/>
+
+  <path id="tr" class="meridian feu"
+        d="M130 130 L135 230 L140 300"
+        data-info="Triple Réchauffeur – Feu – Yang"/>
+
+  <path id="vb" class="meridian bois"
+        d="M150 110 L145 220 L135 350"
+        data-info="Vésicule Biliaire – Bois – Yang"/>
+
+  <path id="foie" class="meridian bois"
+        d="M85 120 L80 220 L75 300"
+        data-info="Foie – Bois – Yin"/>
+</svg>
+
+<div class="tooltip" id="tooltip"></div>
+
+<script>
+const tooltip = document.getElementById("tooltip");
+
+function toggle(id) {
+  const el = document.getElementById(id);
+  el.style.display = el.style.display === "block" ? "none" : "block";
+}
+
+function showAll() {
+  document.querySelectorAll(".meridian").forEach(m => m.style.display = "block");
+}
+
+function hideAll() {
+  document.querySelectorAll(".meridian").forEach(m => m.style.display = "none");
+}
+
+// Tooltips
+document.querySelectorAll(".meridian").forEach(m => {
+  m.addEventListener("mousemove", e => {
+    tooltip.style.display = "block";
+    tooltip.textContent = m.dataset.info;
+    tooltip.style.left = e.pageX + 10 + "px";
+    tooltip.style.top = e.pageY + 10 + "px";
+  });
+  m.addEventListener("mouseleave", () => {
+    tooltip.style.display = "none";
+  });
+});
+</script>
+
+</body>
+</html>
