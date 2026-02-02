@@ -5,30 +5,95 @@
 <title>Méridiens MTC – Version interactive avancée</title>
 
 <style>
+/* 🌿 STYLE GÉNÉRAL */
 body {
-  font-family: Arial, sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial, sans-serif;
+  background: #f7f4ef;
+  color: #2f2f2f;
   display: flex;
-  gap: 20px;
-  padding: 20px;
+  gap: 24px;
+  padding: 24px;
 }
 
+/* 🌿 PANNEAU DE CONTRÔLE */
 .controls {
   width: 280px;
+  background: #ffffff;
+  padding: 18px;
+  border-radius: 14px;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.08);
 }
 
 .controls h2 {
   margin-top: 0;
+  font-weight: 500;
+  text-align: center;
+}
+
+.controls label {
+  display: block;
+  margin-bottom: 8px;
+  cursor: pointer;
 }
 
 button {
-  margin: 5px 5px 10px 0;
+  border: none;
+  background: #e6e1d8;
+  padding: 8px 12px;
+  border-radius: 10px;
+  margin-right: 6px;
+  cursor: pointer;
 }
 
+button:hover {
+  background: #d9d2c6;
+}
+
+/* 🌿 SCHÉMA */
 svg {
   width: 420px;
-  border: 1px solid #ccc;
+  background: #fffdf9;
+  border-radius: 20px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.1);
 }
 
+/* 🌿 CORPS */
+.body {
+  fill: #f3d9c8;
+  opacity: 0.9;
+}
+
+/* 🌿 MÉRIDIENS */
+.meridian {
+  fill: none;
+  stroke-width: 3;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  opacity: 0.85;
+  display: none;
+  transition: opacity 0.3s ease;
+}
+
+/* 🌿 PALETTE MTC DOUCE */
+.bois   { stroke: #6b8f71; }   /* Vert sauge */
+.feu    { stroke: #b24c3a; }   /* Rouge brique */
+.terre  { stroke: #c2a14d; }   /* Ocre */
+.metal  { stroke: #9ea4a8; }   /* Gris perle */
+.eau    { stroke: #4f6d7a; }   /* Bleu ardoise */
+
+/* 🌿 INFO-BULLES */
+.tooltip {
+  position: absolute;
+  background: #ffffff;
+  color: #333;
+  padding: 8px 12px;
+  border-radius: 10px;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.15);
+  font-size: 14px;
+  pointer-events: none;
+  display: none;
+}
+</style>
 /* Méridiens */
 .meridian {
   fill: none;
